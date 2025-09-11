@@ -7,17 +7,37 @@ declare( strict_types = 1 );
 namespace JDWX\Result;
 
 
+/**
+ * @template T
+ */
 readonly class Result implements ResultInterface {
 
 
+    /** @param T|null $xValue */
     public function __construct( public bool $bOK = true, public ?string $nstMessage = null, public mixed $xValue = null ) {}
 
 
+    /**
+     * @param string|null $i_stMessage The error message, if any.
+     * @param mixed $i_xValue The value associated with this result, if any.
+     * @return self An error result.
+     *
+     * Might be null!
+     * @phpstan-ignore missingType.generics
+     */
     public static function err( ?string $i_stMessage = null, mixed $i_xValue = null ) : self {
         return new self( false, $i_stMessage, $i_xValue );
     }
 
 
+    /**
+     * @param string|null $i_stMessage
+     * @param mixed $i_xValue
+     * @return self A successful result.
+     *
+     * Might be null!
+     * @phpstan-ignore missingType.generics
+     */
     public static function ok( ?string $i_stMessage = null, mixed $i_xValue = null ) : self {
         return new self( true, $i_stMessage, $i_xValue );
     }
@@ -49,7 +69,7 @@ readonly class Result implements ResultInterface {
 
 
     /**
-     * @return mixed The value associated with this result.
+     * @return T|null The value associated with this result.
      * @throws \RuntimeException if this result is an error.
      *
      * This is the safe way to get the value, as it will throw an exception if the result is an error.
@@ -60,6 +80,25 @@ readonly class Result implements ResultInterface {
             throw new \RuntimeException( "Cannot get value from error result: {$this}" );
         }
         return $this->xValue;
+    }
+
+
+    /**
+     * @return T The value associated with this result.
+     * @throws \RuntimeException if this result has no value.
+     *
+     * This is the safe way to get the value, as it will throw an exception if the result has no value.
+     * If you want to get the value without checking, you can access the xValue property directly.
+     *
+     * It would be great if PHP had official template support to resolve all these weird edge cases.
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function valueEx() : mixed {
+        $x = $this->value();
+        if ( ! is_null( $x ) ) {
+            return $x;
+        }
+        throw new \RuntimeException( "Result has no value: {$this}" );
     }
 
 

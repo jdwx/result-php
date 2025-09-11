@@ -10,18 +10,19 @@ use JDWX\Result\Result;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
+/** @return Result<int> */
 function ExampleFunction() : Result {
-    return match( random_int( 0, 1 ) ) {
+    return match ( random_int( 0, 1 ) ) {
         0 => Result::err( 'This is an error message.' ),
         1 => Result::ok( 'This is an example message.', 42 ),
     };
 }
 
 
-(static function() : void {
+( static function () : void {
 
     $result = ExampleFunction();
-    if( $result->isOK() ) {
+    if ( $result->isOK() ) {
         echo "Success ({$result}) with value: ", $result->value(), "\n";
     } else {
         echo "Error: {$result}\n";
@@ -30,4 +31,4 @@ function ExampleFunction() : Result {
         $result->value();
     }
 
-})();
+} )();

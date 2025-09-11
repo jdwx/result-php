@@ -138,4 +138,31 @@ final class ResultTest extends TestCase {
     }
 
 
+    public function testValueExForErrorNoValue() : void {
+        $res = Result::err( 'Something went wrong.' );
+        $this->expectException( \RuntimeException::class );
+        $res->valueEx();
+    }
+
+
+    public function testValueExForErrorValue() : void {
+        $res = Result::err( 'Something went wrong.', 42 );
+        $this->expectException( \RuntimeException::class );
+        $res->valueEx();
+    }
+
+
+    public function testValueExForSuccessNoValue() : void {
+        $res = Result::ok();
+        $this->expectException( \RuntimeException::class );
+        $res->valueEx();
+    }
+
+
+    public function testValueExForSuccessValue() : void {
+        $res = Result::ok( 'All good.', 42 );
+        self::assertSame( 42, $res->valueEx() );
+    }
+
+
 }
