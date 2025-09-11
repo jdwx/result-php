@@ -28,4 +28,7 @@ interface ResultInterface extends Stringable {
     public function value() : mixed;
 
 
+    public function valueEx() : mixed;
+
+
 }
