@@ -6,6 +6,7 @@
       "JDWX\\Result\\": "src/"
     }
   },
+  "license": "MIT",
   "require": {
     "php": "^8.3"
   },
