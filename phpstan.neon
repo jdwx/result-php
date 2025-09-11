@@ -1,0 +1,9 @@
+parameters:
+	level: 8
+	treatPhpDocTypesAsCertain: false
+	paths:
+		- example
+		- src
+		- tests
+	scanDirectories:
+		- vendor

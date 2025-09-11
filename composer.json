@@ -1,0 +1,23 @@
+{
+  "name": "jdwx/result",
+  "description": "A microscopic module for managing complex function call results.",
+  "autoload": {
+    "psr-4": {
+      "JDWX\\Result\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8.3"
+  },
+  "require-dev": {
+    "phan/phan": "^v5",
+    "phpstan/phpstan": "^2.0",
+    "phpunit/phpunit": "^12",
+    "roave/security-advisories": "dev-latest"
+  },
+  "scripts": {
+    "phan": "PHAN_ALLOW_XDEBUG=1 php -d xdebug.mode=off vendor/bin/phan -S --analyze-twice",
+    "phpstan": "phpstan",
+    "test": "vendor/bin/phpunit tests"
+  }
+}
