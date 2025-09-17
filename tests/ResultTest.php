@@ -122,6 +122,90 @@ final class ResultTest extends TestCase {
     }
 
 
+    public function testUnwrap() : void {
+        $res = Result::ok();
+        self::assertNull( $res->unwrap() );
+
+        $res = Result::ok( 'All good.' );
+        self::assertNull( $res->unwrap() );
+
+        $res = Result::ok( 'All good.', 42 );
+        self::assertSame( 42, $res->unwrap() );
+
+        $res = Result::err();
+        $this->expectException( \RuntimeException::class );
+        $res->unwrap();
+    }
+
+
+    public function testUnwrapExForErrorNoValue() : void {
+        $res = Result::err( 'Something went wrong.' );
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapEx();
+    }
+
+
+    public function testUnwrapExForErrorValue() : void {
+        $res = Result::err( 'Something went wrong.', 42 );
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapEx();
+    }
+
+
+    public function testUnwrapExForSuccessNoValue() : void {
+        $res = Result::ok();
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapEx();
+    }
+
+
+    public function testUnwrapExForSuccessValue() : void {
+        $res = Result::ok( 'All good.', 42 );
+        self::assertSame( 42, $res->unwrapEx() );
+    }
+
+
+    public function testUnwrapOr() : void {
+        $res = Result::ok();
+        self::assertSame( 99, $res->unwrapOr( 99 ) );
+
+        $res = Result::ok( 'All good.' );
+        self::assertSame( 99, $res->unwrapOr( 99 ) );
+
+        $res = Result::ok( 'All good.', 42 );
+        self::assertSame( 42, $res->unwrapOr( 99 ) );
+    }
+
+
+    public function testUnwrapOrForError() : void {
+
+        $res = Result::err();
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapOr( 99 );
+
+    }
+
+
+    public function testUnwrapOrForErrorWithMessage() : void {
+
+        $res = Result::err( 'Something went wrong.' );
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapOr( 99 );
+
+    }
+
+
+    public function testUnwrapOrForErrorWithMessageAndValue() : void {
+        $res = Result::err( 'Something went wrong.', 42 );
+        $this->expectException( \RuntimeException::class );
+        $res->unwrapOr( 99 );
+    }
+
+
+    /**
+     * @noinspection PhpDeprecationInspection
+     * @suppress PhanDeprecatedFunction
+     */
     public function testValue() : void {
         $res = Result::ok();
         self::assertNull( $res->value() );
@@ -138,30 +222,14 @@ final class ResultTest extends TestCase {
     }
 
 
-    public function testValueExForErrorNoValue() : void {
+    /**
+     * @noinspection PhpDeprecationInspection
+     * @suppress PhanDeprecatedFunction
+     */
+    public function testValueEx() : void {
         $res = Result::err( 'Something went wrong.' );
         $this->expectException( \RuntimeException::class );
         $res->valueEx();
-    }
-
-
-    public function testValueExForErrorValue() : void {
-        $res = Result::err( 'Something went wrong.', 42 );
-        $this->expectException( \RuntimeException::class );
-        $res->valueEx();
-    }
-
-
-    public function testValueExForSuccessNoValue() : void {
-        $res = Result::ok();
-        $this->expectException( \RuntimeException::class );
-        $res->valueEx();
-    }
-
-
-    public function testValueExForSuccessValue() : void {
-        $res = Result::ok( 'All good.', 42 );
-        self::assertSame( 42, $res->valueEx() );
     }
 
 

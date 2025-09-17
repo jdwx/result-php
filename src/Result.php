@@ -75,7 +75,7 @@ readonly class Result implements ResultInterface {
      * This is the safe way to get the value, as it will throw an exception if the result is an error.
      * If you want to get the value without checking, you can access the xValue property directly.
      */
-    public function value() : mixed {
+    public function unwrap() : mixed {
         if ( ! $this->bOK ) {
             throw new \RuntimeException( "Cannot get value from error result: {$this}" );
         }
@@ -93,12 +93,36 @@ readonly class Result implements ResultInterface {
      * It would be great if PHP had official template support to resolve all these weird edge cases.
      * @noinspection PhpDocSignatureInspection
      */
-    public function valueEx() : mixed {
-        $x = $this->value();
+    public function unwrapEx() : mixed {
+        $x = $this->unwrap();
         if ( ! is_null( $x ) ) {
             return $x;
         }
         throw new \RuntimeException( "Result has no value: {$this}" );
+    }
+
+
+    public function unwrapOr( mixed $i_default ) : mixed {
+        return $this->unwrap() ?? $i_default;
+    }
+
+
+    /**
+     * @return T|null The value associated with this result.
+     * @deprecated Use unwrap() instead.
+     */
+    public function value() : mixed {
+        return $this->unwrap();
+    }
+
+
+    /**
+     * @return T The value associated with this result.
+     * @deprecated Use unwrapEx() instead.
+     * @noinspection PhpDocSignatureInspection
+     */
+    public function valueEx() : mixed {
+        return $this->unwrapEx();
     }
 
 

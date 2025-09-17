@@ -23,12 +23,12 @@ function ExampleFunction() : Result {
 
     $result = ExampleFunction();
     if ( $result->isOK() ) {
-        echo "Success ({$result}) with value: ", $result->value(), "\n";
+        echo "Success ({$result}) with value: ", $result->unwrap(), "\n";
     } else {
         echo "Error: {$result}\n";
 
         # This will throw an exception
-        $result->value();
+        $result->unwrap();
     }
 
 } )();
