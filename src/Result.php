@@ -136,13 +136,13 @@ readonly class Result implements ResultInterface {
     }
 
 
-    /** @return self<T> */
+    /** @return self<mixed> */
     public function withMessage( ?string $i_nstMessage ) : self {
         return new self( $this->bOK, $i_nstMessage, $this->xValue );
     }
 
 
-    /** @return self<T> */
+    /** @return self<mixed> */
     public function withValue( mixed $i_xValue ) : self {
         return new self( $this->bOK, $this->nstMessage, $i_xValue );
     }
