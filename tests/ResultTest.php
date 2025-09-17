@@ -101,6 +101,40 @@ final class ResultTest extends TestCase {
     }
 
 
+    public function testMessage() : void {
+        $res = Result::ok();
+        self::assertNull( $res->message() );
+
+        $res = Result::ok( 'All good.' );
+        self::assertSame( 'All good.', $res->message() );
+
+        $res = Result::ok( 'All good.', 42 );
+        self::assertSame( 'All good.', $res->message() );
+
+        $res = Result::err();
+        self::assertNull( $res->message() );
+
+        $res = Result::err( 'Something went wrong.' );
+        self::assertSame( 'Something went wrong.', $res->message() );
+
+        $res = Result::err( 'Something went wrong.', 42 );
+        self::assertSame( 'Something went wrong.', $res->message() );
+    }
+
+
+    public function testMessageExForMessage() : void {
+        $res = Result::ok( 'All good.' );
+        self::assertSame( 'All good.', $res->messageEx() );
+    }
+
+
+    public function testMessageExForNoMessage() : void {
+        $res = Result::ok();
+        $this->expectException( \RuntimeException::class );
+        $res->messageEx();
+    }
+
+
     public function testToString() : void {
         $res = Result::ok();
         self::assertSame( '(no message)', strval( $res ) );
@@ -230,6 +264,33 @@ final class ResultTest extends TestCase {
         $res = Result::err( 'Something went wrong.' );
         $this->expectException( \RuntimeException::class );
         $res->valueEx();
+    }
+
+
+    public function testWithMessage() : void {
+        $res = Result::ok();
+        self::assertFalse( $res->hasMessage() );
+        self::assertNull( $res->message() );
+
+        $res2 = $res->withMessage( 'All good.' );
+        self::assertTrue( $res2->hasMessage() );
+        self::assertSame( 'All good.', $res2->messageEx() );
+        self::assertFalse( $res2->isError() );
+        self::assertTrue( $res2->isOK() );
+        self::assertFalse( $res2->hasValue() );
+    }
+
+
+    public function testWithValue() : void {
+        $res = Result::ok();
+        self::assertFalse( $res->hasValue() );
+        self::assertNull( $res->unwrap() );
+        self::assertSame( 99, $res->unwrapOr( 99 ) );
+
+        $res2 = $res->withValue( 42 );
+        self::assertTrue( $res2->hasValue() );
+        self::assertSame( 42, $res2->unwrap() );
+        self::assertSame( 42, $res2->unwrapOr( 99 ) );
     }
 
 

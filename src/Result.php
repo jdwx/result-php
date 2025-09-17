@@ -68,6 +68,16 @@ readonly class Result implements ResultInterface {
     }
 
 
+    public function message() : ?string {
+        return $this->nstMessage;
+    }
+
+
+    public function messageEx() : string {
+        return $this->message() ?? throw new \RuntimeException( "Result has no message: {$this}" );
+    }
+
+
     /**
      * @return T|null The value associated with this result.
      * @throws \RuntimeException if this result is an error.
@@ -123,6 +133,18 @@ readonly class Result implements ResultInterface {
      */
     public function valueEx() : mixed {
         return $this->unwrapEx();
+    }
+
+
+    /** @return self<T> */
+    public function withMessage( ?string $i_nstMessage ) : self {
+        return new self( $this->bOK, $i_nstMessage, $this->xValue );
+    }
+
+
+    /** @return self<T> */
+    public function withValue( mixed $i_xValue ) : self {
+        return new self( $this->bOK, $this->nstMessage, $i_xValue );
     }
 
 

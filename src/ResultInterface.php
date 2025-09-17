@@ -25,6 +25,12 @@ interface ResultInterface extends Stringable {
     public function isOK() : bool;
 
 
+    public function message() : ?string;
+
+
+    public function messageEx() : string;
+
+
     public function unwrap() : mixed;
 
 
@@ -40,6 +46,12 @@ interface ResultInterface extends Stringable {
 
     /** @deprecated */
     public function valueEx() : mixed;
+
+
+    public function withMessage( ?string $i_nstMessage ) : ResultInterface;
+
+
+    public function withValue( mixed $i_xValue ) : ResultInterface;
 
 
 }
